@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/plain; charset=UTF-8"/>
+    <title>LOGIN PAGE</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .border-md {
+            border-width: 2px;
+        }
+        body {
+            min-height: 100vh;
+        }
+
+        .form-control:not(select) {
+            padding: 1rem 0.5rem;
+        }
+
+        select.form-control {
+            height: 40px;
+            padding-left: 0.5rem;
+        }
+
+        .form-control::placeholder {
+            color: #ccc;
+            font-weight: bold;
+            font-size: 0.7rem;
+        }
+        .form-control:focus {
+            box-shadow: none;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row py-5 mt-4 align-items-center">
+        <!-- For Demo Purpose -->
+        <div class="col-md-5 pr-lg-5 mb-5 mb-md-0">
+            <img src="https://candangstudio.com/wp-content/uploads/2020/04/My-New-Project_2.jpg" alt="" class="img-fluid mb-3 d-none d-md-block">
+            <h1>Tạo tài khoản</h1>
+        </div>
+
+        <!-- Registeration Form -->
+        <div class="col-md-7 col-lg-6 ml-auto">
+            <form action="#">
+                <div class="row">
+                    <!-- First Name -->
+                    <div class="input-group col-lg-6 mb-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                                <i class="fa fa-user text-muted"></i>
+                            </span>
+                        </div>
+                        <input id="userName" type="text"  placeholder="Tên đăng nhập" class="form-control bg-white border-left-0 border-md">
+                    </div>
+
+                    <div class="input-group col-lg-6 mb-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                                <i class="fa fa-user text-muted"></i>
+                            </span>
+                        </div>
+                        <input id="password" type="password" placeholder="Mật khẩu" class="form-control bg-white border-left-0 border-md">
+                    </div>
+                    <!-- Password Confirmation -->
+                    <div class="input-group col-lg-6 mb-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                                <i class="fa fa-lock text-muted"></i>
+                            </span>
+                        </div>
+                        <input id="passwordConfirmation" type="password" name="passwordConfirmation" placeholder="Nhập lại mật khẩu" class="form-control bg-white border-left-0 border-md">
+                    </div>
+
+                    <div class="input-group col-lg-12 mb-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                                <i class="fa fa-envelope text-muted"></i>
+                            </span>
+                        </div>
+                        <input id="birthday" type="date" name="birthday" class="form-control bg-white border-left-0 border-md">
+                    </div>
+                    <div class="input-group col-lg-12 mb-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                                <i class="fa fa-phone-square text-muted"></i>
+                            </span>
+                        </div>
+                        <input id="avatar" type="text" name="avatar" class="form-control bg-white border-md border-left-0 pl-3">
+                    </div>
+                    <!-- Job -->
+                    <div class="input-group col-lg-12 mb-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                                <i class="fa fa-black-tie text-muted"></i>
+                            </span>
+                        </div>
+                        <select id="job" name="jobtitle" class="form-control custom-select bg-white border-left-0 border-md">
+                            <option value="ROLE_USER">Người dùng</option>
+                            <option value="ROLE_ADMIN">Quản Trị Viên</option>
+                        </select>
+                    </div>
+                    <!-- Submit Button -->
+
+                        <button th:id="signupBtn" class="form-group col-lg-12 mx-auto mb-4" type="button" >Đăng kí</button>
+
+
+                    <!-- Divider Text -->
+                    <div class="form-group col-lg-12 mx-auto d-flex align-items-center my-4">
+                        <div class="border-bottom w-100 ml-5"></div>
+                        <span class="px-2 small text-muted font-weight-bold text-muted">Hoặc</span>
+                        <div class="border-bottom w-100 mr-5"></div>
+                    </div>
+                    <!-- Already Registered -->
+
+                    <button type="button" class="form-group col-lg-12 mx-auto mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                       Đăng nhập
+                    </button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Đăng nhập</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="userNameLog">Tên đăng nhập: </label>
+                        <input type="text" class="form-control" placeholder="Tên đăng nhập" id="userNameLog">
+                    </div>
+                    <div class="form-group">
+                        <label for="passwordLog">Mật khẩu:</label>
+                        <input type="password" class="form-control" placeholder="Mật khẩu" id="passwordLog">
+                    </div>
+                    <button th:id="loginbtn" type="button" class="btn btn-outline-primary">Đăng nhập</button>
+                    <button type="submit" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $("#signupBtn").on("click",function (){
+      let role = {
+          roleName : $("#job").val()
+      }
+
+        let staff = {
+            userName : $("#userName").val(),
+           password: $("#password").val(),
+           birthday: $("#birthday").val(),
+           avatar  : $("#avatar").val(),
+            role   : role
+        }
+
+        $.ajax ({
+            headers: {
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            url: "/api/create",
+            type: "POST",
+            data: JSON.stringify(staff)
+        }).done (function (resp){
+            if(resp === null) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Không thành công',
+                    text: 'Bạn có chắc bạn nhập đúng?!',
+                })
+            }
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Your work has been saved',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        })
+
+
+    })
+
+    $("#loginbtn").on("click",function () {
+        let login = {
+            userName: $("#userNameLog").val(),
+            password: $("#passwordLog").val()
+        }
+        $.ajax ({
+            headers: {
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            url: "/api/login",
+            type: "POST",
+            data: JSON.stringify(login)
+        }).done (function (resp){
+            console.log(resp)
+            if(resp === true) {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Đăng nhập thành công',
+                    showConfirmButton: false,
+                    timer: 2000
+                })
+                location.href = "/home";
+            }else {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Mật khẩu hoặc tên đăng nhập sai',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+
+        })
+    })
+
+    // ++++++++     template     ++++++++++
+    $(function () {
+        $('input, select').on('focus', function () {
+            $(this).parent().find('.input-group-text').css('border-color', '#80bdff');
+        });
+        $('input, select').on('blur', function () {
+            $(this).parent().find('.input-group-text').css('border-color', '#ced4da');
+        });
+    });
+
+</script>
+</body>
+</html>

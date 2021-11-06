@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+<style>
+    /*
+    DEMO STYLE
+*/
+
+    @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: #fafafa;
+    }
+
+    p {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.1em;
+        font-weight: 300;
+        line-height: 1.7em;
+        color: #999;
+    }
+
+    a,
+    a:hover,
+    a:focus {
+        color: inherit;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+    .navbar {
+        padding: 15px 10px;
+        background: #fff;
+        border: none;
+        border-radius: 0;
+        margin-bottom: 40px;
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-btn {
+        box-shadow: none;
+        outline: none !important;
+        border: none;
+    }
+
+    .line {
+        width: 100%;
+        height: 1px;
+        border-bottom: 1px dashed #ddd;
+        margin: 40px 0;
+    }
+
+    /* ---------------------------------------------------
+        SIDEBAR STYLE
+    ----------------------------------------------------- */
+
+    .wrapper {
+        display: flex;
+        width: 100%;
+    }
+
+    #sidebar {
+        width: 250px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 999;
+        background: #7386D5;
+        color: #fff;
+        transition: all 0.3s;
+    }
+
+    #sidebar.active {
+        margin-left: -250px;
+    }
+
+    #sidebar .sidebar-header {
+        padding: 20px;
+        background: #6d7fcc;
+    }
+
+    #sidebar ul.components {
+        padding: 20px 0;
+        border-bottom: 1px solid #47748b;
+    }
+
+    #sidebar ul p {
+        color: #fff;
+        padding: 10px;
+    }
+
+    #sidebar ul li a {
+        padding: 10px;
+        font-size: 1.1em;
+        display: block;
+    }
+
+    #sidebar ul li a:hover {
+        color: #7386D5;
+        background: #fff;
+    }
+
+    #sidebar ul li.active>a,
+    a[aria-expanded="true"] {
+        color: #fff;
+        background: #6d7fcc;
+    }
+
+    a[data-toggle="collapse"] {
+        position: relative;
+    }
+
+    .dropdown-toggle::after {
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
+    }
+
+    ul ul a {
+        font-size: 0.9em !important;
+        padding-left: 30px !important;
+        background: #6d7fcc;
+    }
+
+    ul.CTAs {
+        padding: 20px;
+    }
+
+    ul.CTAs a {
+        text-align: center;
+        font-size: 0.9em !important;
+        display: block;
+        border-radius: 5px;
+        margin-bottom: 5px;
+    }
+
+    a.download {
+        background: #fff;
+        color: #7386D5;
+    }
+
+    a.article,
+    a.article:hover {
+        background: #6d7fcc !important;
+        color: #fff !important;
+    }
+
+    /* ---------------------------------------------------
+        CONTENT STYLE
+    ----------------------------------------------------- */
+
+    #content {
+        width: calc(100% - 250px);
+        padding: 40px;
+        min-height: 100vh;
+        transition: all 0.3s;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #content.active {
+        width: 100%;
+    }
+
+    /* ---------------------------------------------------
+        MEDIAQUERIES
+    ----------------------------------------------------- */
+
+    @media (max-width: 768px) {
+        #sidebar {
+            margin-left: -250px;
+        }
+        #sidebar.active {
+            margin-left: 0;
+        }
+        #content {
+            width: 100%;
+        }
+        #content.active {
+            width: calc(100% - 250px);
+        }
+        #sidebarCollapse span {
+            display: none;
+        }
+    }
+    .wrapper {
+        margin-top: 10px !important;
+    }
+
+    .container{
+        position: relative;
+        margin-top: 10%;
+        margin-left: 20%;
+    }
+    .error {
+        color: red;
+    }
+</style>
+</head>
+<body>
+<div class="wrapper">
+    <!-- Sidebar  -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>RESTAURANT-MANAGEMENT</h3>
+        </div>
+        <ul class="list-unstyled components">
+            <p>THÔNG TIN</p>
+            <li class="active">
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">TUỲ CHỌN</a>
+                <ul class="collapse list-unstyled" id="homeSubmenu">
+                    <li>
+                        <a href="/admin" class="btn btn-outline-light">
+                           Trang quản lý
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/profile" class="btn btn-outline-light">
+                            Cá nhân
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" class="btn btn-outline-light" onclick="report.openModal()">
+                            Báo cáo
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" class="btn btn-outline-light" onclick="contacts.openModal()">
+                           Thông báo
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/logout" class="btn btn-outline-light" >
+                            Thoát
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Page Content  -->
+    <div id="content">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="btn btn-outline-dark">
+                    <i class="fas fa-align-left"></i>
+                    <span>Menu</span>
+                </button>
+            </div>
+    </div>
+</div>
+
+<!--<a href="javascript:;" class="btn btn-outline-light" onclick="">-->
+<!--    Gọi món-->
+<!--</a>-->
+
+<div class="container">
+    <div>
+        <button class="btn btn-dark mb-1" onclick="openOrderModal()">Gọi món</button>
+    </div>
+    <div class="row">
+        <table id="tableList" class="table table-hover table-dark">
+            <thead>
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>
+                    Tên bàn
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+            </thead>
+            <tbody id="tabledata">
+            </tbody>
+        </table>
+    </div>
+</div>
+<!--Modal order-->
+<div class="modal fade" id="order" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tạo order</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+
+                            <form id="orderDetailCreate">
+                                <div class="form-group">
+                                    <label for="staffname">Tên nhân viên: </label>
+                                    <input id="staffname" data-rule-required="true" data-msg-required="Không được bỏ trống">
+                                </div>
+                                <div class="form-group">
+                                    <label for="tableName">Tên bàn: </label>
+                                    <select class="form-control" id="tableName">
+                                    </select>
+                                </div>
+                                <div>
+                                    <div class="form-group">
+                                        <label for="foodName">Chọn món: </label>
+                                        <select class="form-control" id="foodName">
+                                            <option>Chọn món</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price">Giá: </label>
+                                        <input id="price" readonly>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="quantity">SL : </label>
+                                        <input id="quantity" type="number" data-rule-required="true" data-msg-required="Không được bỏ trống">
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                           <div class="col-6">
+                               <table class="table table-hover">
+                                   <thead>
+                                   <tr>
+                                       <th>Tên món</th>
+                                       <th> Giá</th>
+                                       <th>SL</th>
+                                   </tr>
+                                   </thead>
+                                   <tbody id="order_detail">
+                                   </tbody>
+
+                               </table>
+                           </div>
+
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-primary" onclick="createOrderDetail()">
+                    Lưu lại
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Payment-->
+<div class="modal fade" id="payment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pay">Hoá đơn thanh toán</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-8">
+                        <form>
+                            <label for="payname">Tên NV: </label>
+                            <input id="payname" type="text" data-rule-required="true" data-msg-required="Không được bỏ trống">
+                        </form>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr class="table-dark">
+                                <td>Tên</td>
+                                <td>Giá</td>
+                                <td>SL</td>
+                            </tr>
+                            </thead>
+                            <tbody id="paymentDetail">
+
+                            </tbody>
+                            <tfoot>
+
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="col-4">
+                        <h3>Tổng: </h3>
+                        <h2 id="total" style="background: slateblue"></h2>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-primary" onclick="createBill()">
+                    Xuất hoá đơn
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<!--validator-->
+<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<!--bootbox-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
+<!--Notify-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js" integrity="sha512-efUTj3HdSPwWJ9gjfGR71X9cvsrthIA78/Fvd/IN+fttQVy7XWkOAXb295j8B3cmm/kFKVxjiNYzKw9IQJHIuQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- jQuery CDN - Slim version (=without AJAX) -->
+<!-- Popper.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+<!-- jQuery Custom Scroller CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+<!--Jquery-->
+<script type="text/javascript">
+<!--    table    -->
+show = function (){
+    $.ajax ({
+        url: "/api/table/gettable",
+        dataType: "JSON",
+        type: "GET"
+    }).done(function (tableData){
+        $("#tabledata").empty();
+        $.each(tableData,function (index,item) {
+            $("#tabledata").prepend( `
+                <tr>
+                <td>${item.id}</td>
+                <td>${item.name}</td>
+                <td>
+                <a  class='btn ${item.status ? 'btn-warning' : 'btn-secondary'} btn-sm'>
+                                <i class='fa ${item.status ? 'fa-lock' : 'fa-lock-open'}'></i>
+                            </a>
+                    <a href="javascript:;" class="btn btn-outline-light" onclick="payment(${item.id})">
+                           Thanh toán
+                    </a>
+
+                </td>
+                </tr>
+                `)
+            $("#tableName").prepend(
+                `
+                <option value="${item.id}">${item.name}</option>
+                `);
+        })
+    })
+}
+
+openOrderModal = function () {
+    $("#order").modal("show");
+    resetForm();
+}
+
+//PRODUCT
+getProduct = function () {
+    $.ajax ({
+        url: "/api/product/getproduct",
+        dataType: "JSON",
+        type: "GET"
+    }).done(function (productData) {
+        console.log(productData);
+        $.each(productData,function (index,item) {
+            $("#foodName").prepend(
+                `
+                   <option value="${item.id}">${item.name}</option>
+                `
+            )
+        })
+    })
+}
+
+$("#foodName").on("change",function () {
+    let id = $("#foodName").val();
+    getPrice(id);
+})
+
+$("#quantity").on("input", function () {
+    let quantity = $("#quantity").val();
+    $("#quantity_order_detail").text(quantity);
+
+})
+
+getPrice = function (id) {
+    $.ajax({
+        headers: {
+            'Accept':'application/json',
+            'Content-Type':'application/json'
+        },
+        url: "/api/product/getprice/" + id,
+        type: "GET"
+    }).done (function (product) {
+        $("#price").val(`${product.price}`)
+        $("#order_detail").prepend(
+            `
+            <tr id="">
+                <td>${product.name}</td>
+                <td>${product.price}</td>
+                <td id="quantity_order_detail"></td>
+            </tr>
+            `
+        )
+    }).fail (function () {
+        $.notify("không lấy truy cập được", "error");
+    })
+}
+
+
+
+
+
+
+// Order
+createOrderDetail = function () {
+   if($("#orderDetailCreate").valid()){
+       let orderDetail = {
+           staffName: $("#staffname").val(),
+           quantity: $("#quantity").val(),
+           productName: $("#foodName :selected").text(),
+           price: $("#foodName").val(),
+           table_id: $("#tableName").val()
+       }
+       console.log(orderDetail);
+       $.ajax({
+           headers: {
+               'Accept':'application/json',
+               'Content-Type':'application/json'
+           },
+           url: "/api/orderdetail/create",
+           type: "POST",
+           data: JSON.stringify(orderDetail)
+       }).done(function (orderdetail){
+           if(orderdetail != null) {
+               $("#order").modal("hide");
+               $.notify("Lưu thành công", "success");
+           }
+       }).fail(function () {
+           $.notify("Chưa tạo được", "error");
+       })
+   }
+}
+
+//payment
+payment = function (id) {
+    $.ajax ({
+        headers: {
+            'Accept':'application/json',
+            'Content-Type':'application/json'
+        },
+        url: "/api/orderdetail/getall",
+        type: "GET"
+    }).done(function (orderdetail) {
+        $("#payment").modal("show");
+        $("#paymentDetail").empty();
+                let total = 0;
+            $.each(orderdetail,function (index, item) {
+                if(item.table_id === id) {
+                    total += item.price * item.quantity
+                    console.log(total);
+                    $("#paymentDetail").append(
+                        `
+                <tr>
+                    <td>${item.productName}</td>
+                    <td>${item.price}</td>
+                    <td>${item.quantity}</td>
+                </tr>
+                `
+                    )
+                }
+                $("#total").text(formatNumber(total) + " vnđ");
+            })
+
+
+    }).fail(function (){
+        $.notify("Không thể lấy được danh sách", "error");
+    })
+}
+
+//format Number
+function formatNumber (num) {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+}
+
+//Reset form
+resetForm = function () {
+    $("#staffname").val('');
+    $("#quantity").val('');
+    $("#order_detail").empty();
+}
+
+<!--    template-->
+    $(document).ready(function () {
+        show();
+        getProduct();
+
+
+        $("#sidebar").mCustomScrollbar({
+            theme: "minimal"
+        });
+
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar, #content').toggleClass('active');
+            $('.collapse.in').toggleClass('in');
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        });
+    });
+</script>
+</body>
+</html>
