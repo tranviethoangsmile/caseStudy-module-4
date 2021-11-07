@@ -19,7 +19,7 @@ public class CategoryService implements ICategoryService{
 
     @Override
     public Optional<Category> findById(Long id) {
-        return Optional.empty();
+        return categoryRepo.findById(id);
     }
 
     @Override

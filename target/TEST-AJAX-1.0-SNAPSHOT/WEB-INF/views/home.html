@@ -215,6 +215,15 @@
     .error {
         color: red;
     }
+    #sidebar{
+        background-color: #1f1d1d;
+    }
+    #sidebar ul li.active>a {
+        background-color: black;
+    }
+    #sidebar .sidebar-header {
+        background-color: black;
+    }
 </style>
 </head>
 <body>
@@ -245,8 +254,8 @@
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:;" class="btn btn-outline-light" onclick="contacts.openModal()">
-                           Thông báo
+                        <a href="javascript:;" class="btn btn-outline-light" onclick="notification.openModal()">
+                            Xem Thông báo
                         </a>
                     </li>
                     <li>
@@ -315,7 +324,7 @@
                             <form id="orderDetailCreate">
                                 <div class="form-group">
                                     <label for="staffname">Tên nhân viên: </label>
-                                    <input id="staffname" data-rule-required="true" data-msg-required="Không được bỏ trống">
+                                    <input class="form-control" id="staffname" data-rule-required="true" data-msg-required="Không được bỏ trống">
                                 </div>
                                 <div class="form-group">
                                     <label for="tableName">Tên bàn: </label>
@@ -331,13 +340,13 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="price">Giá: </label>
-                                        <input id="price" readonly>
-                                        </select>
+                                        <input class="form-control" id="price" readonly>
+
                                     </div>
                                     <div class="form-group">
                                         <label for="quantity">SL : </label>
                                         <input id="quantity" type="number" data-rule-required="true" data-msg-required="Không được bỏ trống">
-                                        </select>
+
                                     </div>
                                 </div>
 
@@ -368,6 +377,41 @@
         </div>
     </div>
 </div>
+<!--Modal Report-->
+<div class="modal fade" id="report" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="report_create">Gửi báo cáo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div>
+                        <form id="reportCreate">
+                            <div class="form-group">
+                                <label for="staff_name">Tên nhân viên: </label>
+                                <input class="form-control" id="staff_name" data-rule-required="true" data-msg-required="Không được bỏ trống">
+                            </div>
+                            <div class="form-group">
+                                <label for="report_descript">Nội dung báo cáo: </label>
+                                <textarea class="form-control" id="report_descript" data-rule-required="true" data-msg-required="Không được bỏ trống"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-primary" onclick="createReport()">
+                    Gửi
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--Payment-->
 <div class="modal fade" id="payment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -381,13 +425,13 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-8">
-                        <form>
+                        <form id="paymentBill">
                             <label for="payname">Tên NV: </label>
-                            <input id="payname" type="text" data-rule-required="true" data-msg-required="Không được bỏ trống">
+                            <input class="form-control" id="payname" type="text" data-rule-required="true" data-msg-required="Không được bỏ trống">
                         </form>
                         <table class="table table-hover">
                             <thead>
-                            <tr class="table-dark">
+                            <tr style="background: black; color: white">
                                 <td>Tên</td>
                                 <td>Giá</td>
                                 <td>SL</td>
@@ -399,14 +443,15 @@
                     </div>
                     <div class="col-4">
                         <h3>Tổng: </h3>
-                        <h2 id="total" style="background: slateblue"></h2>
+                        <h2 id="total" style="background: black;color: white"></h2>
+                        <h2 style="background: black;color: white"> VNĐ</h2>
                     </div>
 
                 </div>
 
             </div>
             <div class="modal-footer">
-                <a href="javascript:;" class="btn btn-primary" onclick="createBill()">
+                <a href="javascript:;" class="btn btn-outline-dark" onclick="createBill()">
                     Xuất hoá đơn
                 </a>
             </div>
@@ -414,7 +459,31 @@
     </div>
 </div>
 
-
+<!--Notification-->
+<div class="modal fade" id="notification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notification_info">Thông báo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                    <div>
+                       Người gửi: <p id="sender"></p>
+                        Thời gian: <p id="createAt"></p>
+                        Nội dung: <h2 id="notification_descript"></h2>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-primary" onclick="closeNotification()">
+                    Đóng
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -447,7 +516,7 @@ show = function (){
         $("#tabledata").empty();
         $.each(tableData,function (index,item) {
             $("#tabledata").prepend( `
-                <tr>
+                <tr id="tr_${item.id}">
                 <td>${item.id}</td>
                 <td>${item.name}</td>
                 <td>
@@ -457,7 +526,6 @@ show = function (){
                     <a href="javascript:;" class="btn btn-outline-light" onclick="payment(${item.id})">
                            Thanh toán
                     </a>
-
                 </td>
                 </tr>
                 `)
@@ -474,10 +542,102 @@ openOrderModal = function () {
     resetForm();
 }
 
-//Bill Create
+notification.openModal = function () {
+    $("#notification").modal("show");
+}
+//Get Notification
+getNotification = function () {
+    $.ajax({
+        headers: {
+            'Accept':'application/json',
+            'Content-Type':'application/json'
+        },
+        url: "/api/notification/getnotification",
+        type: "GET"
+    }).done (function (data) {
+        $.each(data, function (index, item) {
+            $("#sender").text(item.name);
+            $("#createAt").text(convert(item.createdAt));
+            $("#notification_descript").text(item.notification);
+        })
 
+    }).fail (function (){
+        $.notify("Lỗi thông báo", "error");
+    })
+}
+closeNotification = function () {
+    $("#notification").modal("hide");
+}
+
+//report
+report.openModal = function () {
+    $("#report").modal("show");
+}
+
+createReport = function () {
+    if($("#reportCreate").valid()){
+        Swal.fire({
+            title: 'Bạn có muốn kiểm tra lại không?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Không',
+            denyButtonText: `Có`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let report = {
+                    name: $("#staff_name").val(),
+                    report: $("#report_descript").val(),
+                    createdAt: new Date(),
+                    stats: 0
+                }
+                console.log(report);
+                $.ajax ({
+                    headers: {
+                        'Accept':'application/json',
+                        'Content-Type':'application/json'
+                    },
+                    url: "/api/report/create",
+                    type: "POST",
+                    data: JSON.stringify(report)
+                }).done(function (data){
+                    if(data != null){
+                        $.notify("Gửi thành công", "success");
+                        $("#report").modal("hide");
+                    }
+                }).fail(function (){
+                    $.notify("Gửi không thành công", "error");
+                })
+            } else if (result.isDenied) {
+                Swal.fire('Changes are not saved', '', 'info')
+            }
+        })
+    }
+}
+
+//Bill Create
 createBill = function () {
-    alert("total" + $("#total").text());
+    if($("#paymentBill").valid()){
+        let bill = {
+            nameStaff: $("#payname").val(),
+            total: parseFloat($("#total").text()),
+            createdAt: new Date()
+        }
+        $.ajax({
+            headers: {
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            url: "/api/bill/create",
+            type: "POST",
+            data: JSON.stringify(bill)
+        }).done(function (data){
+            if(data != null) {
+                $.notify("không lấy truy cập được", "success");
+            }
+        }).fail(function () {
+            $.notify("không lấy truy cập được", "error");
+        })
+    }
 }
 
 //PRODUCT
@@ -509,6 +669,7 @@ $("#quantity").on("input", function () {
 
 })
 
+//get Price
 getPrice = function (id) {
     $.ajax({
         headers: {
@@ -529,42 +690,51 @@ getPrice = function (id) {
             `
         )
     }).fail (function () {
-        $.notify("không lấy truy cập được", "error");
+        $.notify("không lấy giá được", "error");
     })
 }
-
-
-
-
-
 
 // Order
 createOrderDetail = function () {
    if($("#orderDetailCreate").valid()){
-       let orderDetail = {
-           staffName: $("#staffname").val(),
-           quantity: $("#quantity").val(),
-           productName: $("#foodName :selected").text(),
-           price: $("#foodName").val(),
-           table_id: $("#tableName").val()
-       }
-       console.log(orderDetail);
-       $.ajax({
-           headers: {
-               'Accept':'application/json',
-               'Content-Type':'application/json'
-           },
-           url: "/api/orderdetail/create",
-           type: "POST",
-           data: JSON.stringify(orderDetail)
-       }).done(function (orderdetail){
-           if(orderdetail != null) {
-               $("#order").modal("hide");
-               $.notify("Lưu thành công", "success");
+       Swal.fire({
+           title: 'Bạn có cần kiểm tra lại không?',
+           showDenyButton: true,
+           showCancelButton: true,
+           confirmButtonText: 'Không',
+           denyButtonText: `Có`,
+       }).then((result) => {
+           /* Read more about isConfirmed, isDenied below */
+           if (result.isConfirmed) {
+               let orderDetail = {
+                   staffName: $("#staffname").val(),
+                   quantity: $("#quantity").val(),
+                   productName: $("#foodName :selected").text(),
+                   price: $("#price").val(),
+                   table_id: $("#tableName").val()
+               }
+               console.log(orderDetail);
+               $.ajax({
+                   headers: {
+                       'Accept':'application/json',
+                       'Content-Type':'application/json'
+                   },
+                   url: "/api/orderdetail/create",
+                   type: "POST",
+                   data: JSON.stringify(orderDetail)
+               }).done(function (orderdetail){
+                   if(orderdetail != null) {
+                       $("#order").modal("hide");
+                       $.notify("Lưu thành công", "success");
+                   }
+               }).fail(function () {
+                   $.notify("Chưa tạo được", "error");
+               })
+           } else if (result.isDenied) {
+               Swal.fire('Changes are not saved', '', 'info')
            }
-       }).fail(function () {
-           $.notify("Chưa tạo được", "error");
        })
+
    }
 }
 
@@ -595,7 +765,7 @@ payment = function (id) {
                 `
                     )
                 }
-                $("#total").text(formatNumber(total) + " vnđ");
+                $("#total").text(formatNumber(total));
             })
 
 
@@ -609,6 +779,12 @@ function formatNumber (num) {
     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
 }
 
+//convert date
+convert = function (value) {
+    let date = new Date(value);
+    return date.toLocaleString()
+}
+
 //Reset form
 resetForm = function () {
     $("#staffname").val('');
@@ -620,7 +796,7 @@ resetForm = function () {
     $(document).ready(function () {
         show();
         getProduct();
-
+        getNotification();
 
         $("#sidebar").mCustomScrollbar({
             theme: "minimal"

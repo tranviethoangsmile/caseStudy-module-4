@@ -215,6 +215,15 @@
         .error {
             color: red;
         }
+        #sidebar{
+            background-color: black;
+        }
+        #sidebar ul li.active>a {
+            background-color: black;
+        }
+        #sidebar .sidebar-header {
+            background-color: black;
+        }
     </style>
 </head>
 <body>
@@ -240,13 +249,8 @@
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:;" class="btn btn-outline-light" onclick="report.openModal()">
+                        <a href="javascript:;" class="btn btn-outline-light" onclick="notification.openModal()">
                             Gửi Thông Báo
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;" class="btn btn-outline-light" onclick="contacts.openModal()">
-                            Xem báo cáo
                         </a>
                     </li>
                     <li>
@@ -284,6 +288,96 @@
             </div>
     </div>
 </div>
+<!--Body-->
+<div class="container">
+    <div class="row">
+<!--        bảng doanh thu-->
+       <div class="col-6">
+           <h1 style="background: black; color: white">Bảng thống kê doanh thu</h1>
+           <table class="table table-dark">
+               <thead>
+               <tr>
+                   <th>Tên nhân viên</th>
+                   <th>Số tiền</th>
+                   <th>Thời gian</th>
+               </tr>
+               </thead>
+               <tbody id="billList">
+               </tbody>
+               <tfoot>
+               <h1>Tổng: </h1>
+               <h1 id="revenue" style="background: black; color: white"></h1>
+               </tfoot>
+           </table>
+           <a href="javcript:;" class="btn btn-outline-dark" onclick="resetRevenue()">Reset Doanh thu</a>
+       </div>
+<!--        Bảng danh sách món ăn-->
+        <div class="col-6">
+            <h1 style="background: black; color: white">Danh sách món ăn hiện có</h1>
+            <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <th>Tên Món Ăn</th>
+                        <th>Danh mục</th>
+                        <th>Giá</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="product_list">
+                </tbody>
+            </table>
+        </div>
+        <div class="col-6">
+            <h1 style="background: black; color: white">Báo cáo</h1>
+            <table class="table table-dark">
+                <thead>
+                <tr>
+                    <th>Nội Dung báo cáo</th>
+                    <th>Tên NV</th>
+                    <th>Thời gian</th>
+                    <th>Tình trạng</th>
+                </tr>
+                </thead>
+                <tbody id="report_list">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--Notification-->
+<div class="modal fade" id="notification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notification_create">Gửi báo cáo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div>
+                        <form id="notificationCreate">
+                            <div class="form-group">
+                                <label for="sender">Người gửi: </label>
+                                <input class="form-control" id="sender" data-rule-required="true" data-msg-required="Không được bỏ trống">
+                            </div>
+                            <div class="form-group">
+                                <label for="notification_descript">Nội dung thông báo: </label>
+                                <textarea class="form-control" id="notification_descript" data-rule-required="true" data-msg-required="Không được bỏ trống"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-primary" onclick="createNotification()">
+                    Gửi
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!--Modal table-->
 <div class="modal fade" id="table" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -315,7 +409,107 @@
         </div>
     </div>
 </div>
-<!--Modal order-->
+<!--Modal category-->
+<div class="modal fade" id="category" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCategpry">Thêm danh mục mới</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add_category">
+                    <div class="form-group">
+                        <label for="nameCategory">Tên danh mục : </label>
+                        <input type="text" id="nameCategory" data-rule-required="true" data-msg-required="Không được bỏ trống" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-primary" onclick="category.save()">
+                    Lưu lại
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal product-->
+<div class="modal fade" id="product" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProduct">Thêm món mới</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add_product">
+                    <div class="form-group">
+                        <label for="nameProduct">Tên Món : </label>
+                        <input type="text" id="name_Product" data-rule-required="true" data-msg-required="Nhập tên" />
+                    </div>
+                    <div class="form-group">
+                        <label for="price_Product">Giá: </label>
+                        <input type="number" id="price_Product" data-rule-number="true" data-msg-number="Nhập giá" />
+                    </div>
+                    <div class="form-group">
+                        <label for="category_select">Danh mục</label>
+                        <select class="form-control" id="category_select">
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-primary" onclick="productSave()">
+                    Lưu lại
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal edit-->
+<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProduct">Sửa thông tin món ăn</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit_product">
+                    <div class="form-group">
+                        <input type="hidden" id="id" readonly/>
+                    </div>
+                    <div class="form-group">
+                        <label for="nameProduct">Tên Món : </label>
+                        <input type="text" id="nameProduct" data-rule-required="true" data-msg-required="Nhập tên" />
+                    </div>
+                    <div class="form-group">
+                        <label for="price_Product">Giá: </label>
+                        <input type="number" id="priceProduct" data-rule-number="true" data-msg-number="Nhập giá" />
+                    </div>
+                    <div class="form-group">
+                        <label for="category_select">Danh mục</label>
+                        <select class="form-control" id="categorySelect">
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-primary" onclick="productSaveEdit()">
+                    Lưu lại
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!--Validator-->
 <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
@@ -333,40 +527,51 @@
 
 <!--Jquery-->
 <script type="text/javascript">
-    <!--    table    -->
-    show = function (){
-        $.ajax ({
-            url: "/api/table/gettable",
-            dataType: "JSON",
-            type: "GET"
-        }).done(function (tableData){
-            $("#tabledata").empty();
-            $.each(tableData,function (index,item) {
-                $("#tabledata").prepend(
-                    `
-                <tr>
-                <td>${item.id}</td>
-                <td>${item.name}</td>
-                <td>
-                <a  class='btn ${item.status ? 'btn-warning' : 'btn-secondary'} btn-sm'>
-                                <i class='fa ${item.status ? 'fa-lock' : 'fa-lock-open'}'></i>
-                            </a>
-                    <a href="javascript:;" class="btn btn-outline-light" onclick="order(${item.id})">
-                            Gọi món
-                        </a>
-                </td>
-                </tr>
-                `
-                )
-            })
+<!--    notification   -->
+notification.openModal = function () {
+    $("#notification").modal("show");
+}
+
+createNotification = function (){
+    if($("#notificationCreate").valid()){
+        Swal.fire({
+            title: 'Bạn có muốn gửi thông báo này không?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            denyButtonText: `Không`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+               let notification = {
+                   name: $("#sender").val(),
+                   notification: $("#notification_descript").val(),
+                   createdAt: new Date (),
+               }
+               $.ajax({
+                   headers: {
+                       'Accept':'application/json',
+                       'Content-Type':'application/json'
+                   },
+                   url: "/api/notification/create",
+                   type: "POST",
+                   data: JSON.stringify(notification)
+               }).done (function (date){
+                   $.notify("Gửi thành công", "success");
+               }).fail(function (){
+                   $.notify("Gửi thất bại", "error");
+               })
+            } else if (result.isDenied) {
+                Swal.fire('Gửi không thành công', '', 'info')
+            }
         })
     }
+}
 
+<!--    Table -->
     table.openModal = function () {
         $("#table").modal("show");
         table.resetForm();
     }
-
     table.save = function (){
        if($("#tableCreate").valid()){
            let table = {
@@ -379,10 +584,11 @@
                contentType: "application/json",
                data: JSON.stringify(table)
            }).done (function (tableResp) {
-               show();
+               // show();
                $('#table').modal('hide');
-               $.notify("Access granted", "success");
-
+               $.notify("Tạo bàn thành công", "success");
+           }).fail(function (){
+               $.notify("Tạo bàn thất bại", "error");
            })
         }
     }
@@ -390,11 +596,356 @@
         $("#nameTable").val('');
         $("#status").prop('checked', false);
     }
+    //Report
+    getAllReport = function () {
+       $.ajax({
+           headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json'
+           },
+           url: "/api/report/getall",
+           type: "GET"
+       }).done (function (data){
+           $.each(data,function (index,item) {
+               $("#report_list").prepend(
+                   `
+                   <tr>
+                    <td>${item.report}</td>
+                    <td>${item.name}</td>
+                    <td>${convert(item.createdAt)}</td>
+                    <td>
+                            <a  class='btn ${item.status ? 'btn-warning' : 'btn-secondary'} btn-sm'>
+                                <i class='fa ${item.status ? 'fa-lock' : 'fa-lock-open'}'></i>
+                            </a>
+                    </td>
+                   </tr>
+                   `
+               )
+           })
+       }).fail(function (){
+           $.notify("lỗi khi tải báo cáo", "error");
+       })
 
+    }
+
+    // Bảng doanh thu
+
+    getAllRevenue = function () {
+        $.ajax ({
+            headers: {
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            url: "/api/bill/getall",
+            type: "GET"
+        }).done(function (data){
+            console.log(data);
+            let revenue = 0;
+            $.each(data,function (index,item) {
+                revenue += item.total;
+                $("#billList").prepend(
+                    `
+                    <tr>
+                       <td>${item.nameStaff}</td>
+                       <td>${item.total}</td>
+                       <td>${convert(item.createdAt)}</td>
+                    </tr>
+                    `
+                )
+            })
+            $("#revenue").text(formatNumber(revenue) + ",000"+" vnđ");
+        }).fail(function (){
+            $.notify("lỗi khi tải doanh thu", "error");
+        })
+    }
+
+    resetRevenue = function () {
+        Swal.fire({
+            title: 'chức năng này đang được phát triển vui lòng đợi version tiếp theo?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'ok',
+            denyButtonText: `ok`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                Swal.fire('Cảm ơn :)', '', 'success')
+            } else if (result.isDenied) {
+                Swal.fire('Cảm ơn :)', '', 'success')
+            }
+        })
+    }
+
+    //Category
+    category.openModal = function () {
+        $("#nameCategory").val('');
+        $("#category").modal("show");
+    }
+
+
+    category.save = function () {
+        if ($("#add_category").valid()) {
+            Swal.fire({
+                title: 'Bạn có muốn lưu lại không?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Có',
+                denyButtonText: `Không`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let category = {
+                        name : $("#nameCategory").val()
+                    }
+                    $.ajax({
+                        headers: {
+                            'Accept':'application/json',
+                            'Content-Type':'application/json'
+                        },
+                        url: "/api/category/create",
+                        type: "POST",
+                        data: JSON.stringify(category)
+                    }).done(function (data){
+                        if(data != null) {
+                            Swal.fire('Đã lưu thành công!', '', 'success')
+                            $("#category").modal("hide");
+                        }
+                    }).fail(function (){
+                        Swal.fire('lưu không thành công!', '', 'error')
+                    })
+
+                } else if (result.isDenied) {
+                    Swal.fire('Không được lưu', '', 'info')
+                }
+            })
+        }
+    }
+
+    getAllCategory = function () {
+        $.ajax({
+            headers: {
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            url: "/api/category/list",
+            type: "GET"
+        }).done (function (data) {
+            $("#category_select").empty();
+            $("#categorySelect").empty();
+            $.each(data ,function (index, item) {
+                $("#category_select").prepend(
+                    `
+                    <option value="${item.id}">${item.name}</option>
+                    `
+                )
+                $("#categorySelect").prepend(
+                    `
+                    <option value="${item.id}">${item.name}</option>
+                    `
+                )
+
+            })
+        }).fail(function (){
+            $.notify("lỗi khi tải danh mục", "error");
+        })
+    }
+
+    getCategoryById = function (id) {
+        $.ajax({
+            headers: {
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            url: "/api/category/getbyid/" + id,
+            type: "GET"
+        }).done(function (data){
+            console.log(date);
+        }).fail (function (){
+            $.notify("lỗi khi tải danh mục", "error");
+        })
+    }
+
+    // Add prduct
+    product.openModal = function () {
+        $("#nameProduct").val('');
+        $("#price_Product").val('');
+        $("#product").modal("show");
+        getAllCategory();
+    }
+
+    productSave = function () {
+        if($("#add_product").valid()){
+            Swal.fire({
+                title: 'Bạn muốn lưu lại không?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Lưu',
+                denyButtonText: `Không lưu`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let category = {
+                        id: parseInt($("#category_select").val()),
+                        name: $("#category_select :selected").text()
+                    }
+                    let product = {
+                        name: $("#nameProduct").val(),
+                        price: $("#price_Product").val(),
+                        category: category
+                    }
+                    $.ajax({
+                        headers: {
+                            'Accept':'application/json',
+                            'Content-Type':'application/json'
+                        },
+                        url: "/api/product/create",
+                        type: "POST",
+                        data: JSON.stringify(product)
+                    }).done(function (data) {
+                        if(data != null) {
+                            $("#product").modal("hide");
+                            getAllProduct();
+                            $.notify("Thêm món ăn thành công", "success")
+                        }
+                    }).fail(function (){
+                        alert("that bai");
+                    })
+                } else if (result.isDenied) {
+                    Swal.fire('Không lưu', '', 'info')
+                }
+            })
+        }
+    }
+
+    getAllProduct = function () {
+        $.ajax({
+            headers: {
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            url: "/api/product/getproduct",
+            type: "GET"
+        }).done(function (data){
+            $("#product_list").empty();
+            $.each(data, function (index, item) {
+                $("#product_list").prepend(
+                    `
+                    <tr id="tr_${item.id}">
+                        <td>${item.name}</td>
+                        <td>${item.category.name}</td>
+                        <td>${item.price}</td>
+                        <td>
+                            <button onclick="deleteProduct(${item.id})" class="btn btn-outline-danger"><i class="fa fa-"></i>Xoá</button>
+                            <button onclick="editProduct(${item.id})" class="btn btn-outline-primary"><i class="fa fa-edit"></i>Edit</button>
+                        </td>
+                    </tr>
+                    `
+                )
+            })
+        }).fail(function (){
+            $.notify("lấy list product lỗi", "error")
+        })
+    }
+
+    //delete Product
+    deleteProduct = function (id) {
+        Swal.fire({
+            title: 'Bạn có muốn xoá món ăn này?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            denyButtonText: `Không`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    headers: {
+                        'Accept':'application/json',
+                        'Content-Type':'application/json'
+                    },
+                    url: "/api/product/delete/" + id,
+                    type: "GET"
+                }).done(function (resp){
+                    console.log(resp);
+                    $("#tr_" + id).remove();
+                    $.notify("Xoá thành công", "success")
+                }).fail(function (){
+                    $.notify("Xoá không thành công", "error")
+                })
+            } else if (result.isDenied) {
+                Swal.fire('Changes are not saved', '', 'info')
+            }
+        })
+    }
+
+    //Edit product
+    editProduct = function (id) {
+        $.ajax({
+            headers: {
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            url: "/api/product/getprice/" + id,
+            type: "GET"
+        }).done (function (product) {
+                $("#edit").modal("show")
+                $("#id").val(product.id);
+                $("#nameProduct").val(product.name);
+                $("#priceProduct").val(product.price);
+                $("#categorySelect").val(product.category.id);
+        }).fail (function () {
+            $.notify("không lấy được thông tin món ăn", "error");
+        })
+    }
+
+    //update product
+    productSaveEdit = function () {
+        let category = {
+            id : $("#categorySelect").val(),
+            name: $("#categorySelect :selected").text(),
+        }
+        let product = {
+            id: $("#id").val(),
+            name: $("#nameProduct").val(),
+            price: $("#priceProduct").val(),
+            category:category
+        }
+        $.ajax({
+            headers: {
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            url: "/api/product/create",
+            type: "POST",
+            data: JSON.stringify(product)
+        }).done(function (data){
+            if(data != null) {
+                console.log(data);
+                $("#edit").modal("hide");
+                getAllProduct();
+            }
+        }).fail(function (){
+            $.notify("Cập nhật không thành công", "error");
+        })
+    }
+
+    //convert date
+    convert = function (value) {
+        let date = new Date(value);
+        return date.toLocaleString()
+    }
+
+    //format Number
+    function formatNumber (num) {
+        return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+    }
 
     <!--    template-->
+    init = function (){
+        getAllCategory();
+        getAllRevenue ();
+        getAllProduct();
+        getAllReport();
+    }
     $(document).ready(function () {
-
+       init();
         $("#sidebar").mCustomScrollbar({
             theme: "minimal"
         });

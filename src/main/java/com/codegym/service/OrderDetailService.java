@@ -33,6 +33,5 @@ public class OrderDetailService implements IOrderDetailService{
 
     @Override
     public void remove(Long id) {
-
     }
 }

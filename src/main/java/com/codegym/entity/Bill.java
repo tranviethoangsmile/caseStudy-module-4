@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -20,4 +21,5 @@ public class Bill {
     private Long id;
     private String nameStaff;
     private BigDecimal total;
+    private Date createdAt;
 }

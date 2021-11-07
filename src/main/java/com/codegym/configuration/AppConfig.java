@@ -192,5 +192,18 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
     public IOrderDetailService orderDetailService () {
         return new OrderDetailService();
     }
+    @Bean
+    public IBillService billService () {
+        return new BillService();
+    }
+    @Bean
+    public IReportService reportService () {
+        return new ReportService();
+    }
+
+    @Bean
+    public INotificationService notificationService () {
+        return new NotificationService();
+    }
 
 }

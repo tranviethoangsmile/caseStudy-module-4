@@ -6,7 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 
 @RestController
@@ -30,6 +34,12 @@ public class RestaurantApiController {
     ITableService tableService;
     @Autowired
     IOrderDetailService orderDetailService;
+    @Autowired
+    IBillService billService;
+    @Autowired
+    IReportService reportService;
+    @Autowired
+    INotificationService notificationService;
 
     @PostMapping("/create")
     public Staff crateUser (@RequestBody Staff staff) {
@@ -63,21 +73,22 @@ public class RestaurantApiController {
         }
     }
 
-    @PostMapping ("/product/create")
-    public Product createProduct (@RequestBody Product product) {
-            return productService.save(product);
-    }
 
     @PostMapping ("/category/create")
     public Category createCategory (@RequestBody Category category) {
         Category categoryresp = categoryService.save(category);
         return categoryresp;
     }
-
     @GetMapping("/category/list")
     public Iterable<Category> getAllCategory () {
         return categoryService.findAll();
     }
+
+    @GetMapping("/category/getbyid/{id}")
+    private Optional<Category> getCategoryByIdget (Long id) {
+        return categoryService.findById(id);
+    }
+
 
     @PostMapping ("/table/create")
     public TableDinner createTable (@RequestBody TableDinner tableDinner) {
@@ -95,27 +106,36 @@ public class RestaurantApiController {
     }
 
 
+    @PostMapping ("/product/create")
+    public Product createProduct (@RequestBody Product product) {
+        return productService.save(product);
+    }
+
     @GetMapping("/product/getproduct")
     public Iterable <Product> getAllProduct () {
         return productService.findAll();
     }
+    @GetMapping ("/product/delete/{id}")
+    public ResponseEntity<Boolean> delete(@PathVariable Long id) {
+        productService.remove(id);
 
+        Optional<Product> product = productService.findById(id);
 
-
+        if (product.isPresent()) {
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
+    }
     @GetMapping("/product/getprice/{id}")
     public Product getPriceProduct (@PathVariable Long id) {
         return productService.findById(id).get();
     }
 
+
     @PostMapping ("/orderdetail/create")
     public OrderDetail createOrderDetail (@RequestBody OrderDetail orderDetail) {
         return orderDetailService.save(orderDetail);
     }
-//
-//    @GetMapping("/orderdetail/gettableby/${id}")
-//    public Iterable<OrderDetail> getOrderDetails (@PathVariable Long id) {
-//        return orderDetailService.findAllByTableId(id);
-//    }
 
     @GetMapping ("/orderdetail/getall")
     public Iterable <OrderDetail> getAll () {
@@ -123,5 +143,34 @@ public class RestaurantApiController {
     }
 
 
+    @PostMapping("/bill/create")
+    public Bill createBill (@RequestBody Bill bill) {
+        return billService.save(bill);
+    }
+
+    @GetMapping("/bill/getall")
+    public Iterable <Bill> getABill () {
+        return billService.findAll();
+    }
+
+    @PostMapping ("/report/create")
+    public Report createReport (@RequestBody Report report) {
+        return reportService.save(report);
+    }
+
+    @GetMapping("/report/getall")
+    public Iterable<Report> getAllReport () {
+       return reportService.findAll();
+    }
+
+    @PostMapping ("/notification/create")
+    public Notification createNotification (@RequestBody Notification notification) {
+        return notificationService.save(notification);
+    }
+
+    @GetMapping("/notification/getnotification")
+    public Iterable <Notification> getNotification () {
+        return notificationService.findAll();
+    }
 
 }

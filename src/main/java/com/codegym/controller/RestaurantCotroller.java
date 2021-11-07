@@ -14,14 +14,19 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 @Controller
-@RequestMapping (value = {"","/","start"})
+@RequestMapping ("")
 public class RestaurantCotroller {
     @Autowired
     IStaffService staffService;
 
+    @GetMapping
+    public ModelAndView goLogin (){
+        ModelAndView modelAndView = new ModelAndView("/login");
+        return modelAndView;
+    }
 
     @GetMapping("/admin")
-    public ModelAndView goLogin () {
+    public ModelAndView goAdmin () {
         ModelAndView modelAndView = new ModelAndView("/admin");
         return modelAndView;
     }

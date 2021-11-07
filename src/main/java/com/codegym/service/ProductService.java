@@ -24,12 +24,11 @@ public class ProductService implements IProductService{
 
     @Override
     public Product save(Product product) {
-        Product newProduct = productRepo.save(product);
-        return newProduct;
+        return productRepo.save(product);
     }
 
     @Override
     public void remove(Long id) {
-
+        productRepo.deleteById(id);
     }
 }
