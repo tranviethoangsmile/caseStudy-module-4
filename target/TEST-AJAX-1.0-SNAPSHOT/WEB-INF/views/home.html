@@ -224,9 +224,38 @@
     #sidebar .sidebar-header {
         background-color: black;
     }
+/*    preloader*/
+    #af-preloader{width:100%;height:100%;position:fixed;background-color:#fff;z-index:99999999;top:0;left:0}
+
+    .af-preloader-wrap{position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}
+
+    .af-sp{width:42px;height:42px;clear:both;margin:20px auto}
+
+    .af-sp-wave{border-radius:50%;position:relative;opacity:1}
+
+    .af-sp-wave:before,.af-sp-wave:after{content:'';border:2px #33b5e5 solid;border-radius:50%;width:100%;height:100%;position:absolute;left:0}
+
+    .af-sp-wave:before{transform:scale(1,1);opacity:1;-webkit-animation:spWaveBe .6s infinite linear;animation:spWaveBe .6s infinite linear}
+
+    .af-sp-wave:after{transform:scale(0,0);opacity:0;-webkit-animation:spWaveAf .6s infinite linear;animation:spWaveAf .6s infinite linear}
+
+    @-webkit-keyframes spWaveAf{from{-webkit-transform:scale(.5,.5);opacity:0}to{-webkit-transform:scale(1,1);opacity:1}}
+
+    @keyframes spWaveAf{from{transform:scale(.5,.5);opacity:0}to{transform:scale(1,1);opacity:1}}
+
+    @-webkit-keyframes spWaveBe{from{-webkit-transform:scale(1,1);opacity:1}to{-webkit-transform:scale(1.5,1.5);opacity:0}}
+
+    @keyframes spWaveBe{from{-webkit-transform:scale(1,1);opacity:1}to{-webkit-transform:scale(1.5,1.5);opacity:0}}
 </style>
 </head>
 <body>
+<!--preloader-->
+<div id='af-preloader'>
+    <div class='af-preloader-wrap'>
+        <div class='af-sp af-sp-wave'></div>
+    </div>
+</div>
+<!--end-->
 <div class="wrapper">
     <!-- Sidebar  -->
     <nav id="sidebar">
@@ -429,7 +458,7 @@
                             <label for="payname">Tên NV: </label>
                             <input class="form-control" id="payname" type="text" data-rule-required="true" data-msg-required="Không được bỏ trống">
                         </form>
-                        <table class="table table-hover">
+                        <table style="margin-top: 10px" class="table table-hover">
                             <thead>
                             <tr style="background: black; color: white">
                                 <td>Tên</td>
@@ -632,10 +661,11 @@ createBill = function () {
             data: JSON.stringify(bill)
         }).done(function (data){
             if(data != null) {
-                $.notify("không lấy truy cập được", "success");
+                $.notify("Đã thanh toán thành công", "success");
+                $("#payment").modal("hide");
             }
         }).fail(function () {
-            $.notify("không lấy truy cập được", "error");
+            $.notify("không lấy được chi tiết hoá đơn", "error");
         })
     }
 }
@@ -782,7 +812,7 @@ function formatNumber (num) {
 //convert date
 convert = function (value) {
     let date = new Date(value);
-    return date.toLocaleString()
+    return date.toLocaleString();
 }
 
 //Reset form
@@ -794,6 +824,7 @@ resetForm = function () {
 
 <!--    template-->
     $(document).ready(function () {
+        $('#af-preloader').delay(500).fadeOut('slow')
         show();
         getProduct();
         getNotification();
